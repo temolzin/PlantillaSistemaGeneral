@@ -9,7 +9,7 @@
                 <head>
                   <meta charset="utf-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1">
-                  <title>AdminLTE 3 | Dashboard</title>
+                  <title>Plantilla | Dashboard</title>
                 
                   <!-- Google Font: Source Sans Pro -->
                   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -37,6 +37,8 @@
                   <link rel="stylesheet" href="' . constant('URL') . 'public/plugins/summernote/summernote-bs4.min.css">
                   <!-- sweetalert2 -->
                   <link rel="stylesheet" href="' . constant('URL') . 'public/plugins/sweetalert2/sweetalert2.css">
+                  <!-- icon -->
+                  <link rel="icon" href="' . constant('URL') . 'public/img/favicon.png" type="image/x-icon">
                 </head>
                 <body class="hold-transition sidebar-mini layout-fixed">
                 <div class="wrapper">
@@ -235,10 +237,10 @@
                             </ul>
                           </li>
                           <li class="nav-item">
-                            <a id="alumno" name="alumno" href="'.constant('URL').'alumno" class="nav-link">
+                            <a id="cliente" name="cliente" href="'.constant('URL').'cliente" class="nav-link">
                               <i class="nav-icon fas fa-user"></i>
                               <p>
-                                Alumno
+                                Cliente
                               </p>
                             </a>
                           </li>

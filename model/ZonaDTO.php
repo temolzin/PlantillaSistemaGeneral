@@ -1,8 +1,7 @@
 <?php
-    class AlumnoDTO implements JsonSerializable {
-        private $idAlumno;
+    class ZonaDTO implements JsonSerializable {
+        private $idZona;
         private $nombre;
-        private $apellido;
 
         public function __get($property){
             if(property_exists($this, $property)) {

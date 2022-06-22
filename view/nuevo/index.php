@@ -9,7 +9,7 @@
 		<h1 class="center">
 			VISTA APARTADO NUEVO
 		</h1>
-        <form action="<?php echo constant('URL')?>nuevo/registrarAlumno" method="post">
+        <form action="<?php echo constant('URL')?>nuevo/registrarCliente" method="post">
             <p>
                 <label for="matricula">Matrícula</label><br>
                 <input type="text" name="matricula" id="matricula" required>
@@ -23,7 +23,7 @@
                 <input type="text" name="apellido" id="apellido" required>
             </p>
             <p>
-                <input type="submit" value="Registrar Alumno">
+                <input type="submit" value="Registrar Cliente">
             </p>
         </form>
 	</div>

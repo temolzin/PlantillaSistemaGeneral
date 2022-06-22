@@ -11,12 +11,12 @@
 			$this->view->render('nuevo/index');
 		}
 
-		function registrarAlumno() {
+		function registrarCliente() {
 		    $matricula = $_POST['matricula'];
 		    $nombre = $_POST['nombre'];
 		    $apellido = $_POST['apellido'];
 		    $this->model->insert(['matricula' => $matricula, 'nombre' => $nombre, 'apellido' => $apellido]);
-            echo 'Registra alumno';
+            echo 'Registra cliente';
         }
 	}
 ?>
