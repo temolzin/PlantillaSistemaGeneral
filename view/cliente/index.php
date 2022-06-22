@@ -60,7 +60,7 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" id="formRegistrarCliente" name="formRegistrarCliente" method="post">
+                <form role="form" id="formRegistrarCliente" name="formRegistrarCliente">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-sm-12">
@@ -106,7 +106,7 @@
                                 <div class="form-group">
                                     <label>Empresa (*)</label>
                                     <select name="empresa" id="empresa" class="form-control">
-                                        <option value="default">Seleccione Empresa</option>
+                                        <option value="">Seleccione Empresa</option>
                                     </select>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                                 <div class="form-group">
                                     <label>Zona (*)</label>
                                     <select name="zona" id="zona" class="form-control">
-                                        <option value="default">Seleccione Zona</option>
+                                        <option value="">Seleccione Zona</option>
                                     </select>
                                 </div>
                             </div>
@@ -151,6 +151,7 @@
                             <div class="img-fluid col-12 col-sm-12 text-center" id="imagen_container_actualizar"></div>
                             <div class="col-12 col-sm-12">
                                 <span><label>Foto Cliente (*)</label></span>
+                                <div class="col-sm-12 text-center" id="containerFotoActualizar" name="containerFotoActualizar"></div>
                                 <div class="form-group input-group">
                                     <div class="custom-file">
                                         <input type="file" accept="image/*" class="custom-file-input" name="imagen_cliente_actualizar" id="imagen_cliente_actualizar"
@@ -192,7 +193,7 @@
                                 <div class="form-group">
                                     <label>Empresa (*)</label>
                                     <select name="empresa_actualizar" id="empresa_actualizar" class="form-control">
-                                        <option value="default">Seleccione Empresa</option>
+                                        <option value="">Seleccione Empresa</option>
                                     </select>
                                 </div>
                             </div>
@@ -200,7 +201,7 @@
                                 <div class="form-group">
                                     <label>Zona (*)</label>
                                     <select name="zona_actualizar" id="zona_actualizar" class="form-control">
-                                        <option value="default">Seleccione Zona</option>
+                                        <option value="">Seleccione Zona</option>
                                     </select>
                                 </div>
                             </div>
@@ -233,7 +234,7 @@
                 <form role="form" id="formConsulta" name="formConsulta">
                     <div class="card-body">
                         <div class="row">
-                            <div class="img-fluid" id="imagen_detalle"></div>
+                            <div class="col-sm-12 text-center" id="containerFotoDetalle"></div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
@@ -378,7 +379,16 @@
                 "url": "<?php echo constant('URL');?>cliente/read"
             },
             "columns": [
-                { "data": "imagen" },
+                {
+                    defaultContent: "",
+                    "render": function (data, type, full) {
+                        if(full['imagen'] == 'generica.png' || full['imagen'] == '' || full['imagen'] == null ) {
+                            return '<img class="text-center img-fluid direct-chat-img" src="<?php echo constant('URL');?>public/img/generica.png" alt=""/>';
+                        } else {
+                            return '<img class="text-center img-fluid direct-chat-img" src="<?php echo constant('URL');?>public/img/'+full['email']+'/'+full['imagen']+'" alt=""/>';
+                        }
+                    }
+                },
                 { "data": "idCliente" },
                 { "data": "cuit" },
                 { "data": "nombre" },
@@ -410,7 +420,15 @@
             var idActualizar = $("#id_cliente_actualizar").val(data.idCliente);
             var nombre = $("#nombre_actualizar").val(data.nombre);
             var apellido = $("#apellido_actualizar").val(data.apellido);
-            // var imagen = $("#imagen_cliente_actualizar").val(data.imagen);
+
+            if(data.imagen == 'generica.png' || data.imagen == '' || data.imagen == null ) {
+                $('#containerFotoDetalle').html('<img class="profile-user-img img-fluid " src="<?php echo constant('URL');?>public/img/generica.png" alt=""/>');
+                $('#containerFotoActualizar').html('<img class="profile-user-img img-fluid " src="<?php echo constant('URL');?>public/img/generica.png" alt=""/>');
+            } else {
+                $('#containerFotoDetalle').html('<img class="profile-user-img img-fluid " src="<?php echo constant('URL');?>public/img/'+data.email+'/'+data.imagen+'" alt=""/>');
+                $('#containerFotoActualizar').html('<img class="profile-user-img img-fluid " src="<?php echo constant('URL');?>public/img/'+data.email+'/'+data.imagen+'" alt=""/>');
+            }
+
             var cuit = $("#cuit_actualizar").val(data.cuit);
             var idEmpresa = $("#empresa_actualizar").val(data.idEmpresa);
             var idZona = $("#zona_actualizar").val(data.idZona);
@@ -430,10 +448,21 @@
         $.validator.setDefaults({
             submitHandler: function () {
                 var datos = $('#formRegistrarCliente').serialize();
+                var form_data = new FormData(document.getElementById("formRegistrarCliente"));
+                var imagen = "";
+                if ($('#imagen_cliente').val() != null) {
+                    imagen = $('#imagen_cliente').prop('files')[0];
+                }
+                form_data.append('imagen_cliente', imagen);
+
                 $.ajax({
                     type: "POST",
                     url: "<?php echo constant('URL');?>cliente/insert",
-                    data: datos,
+                    dataType: "html",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
                     success: function (data) {
                         if (data == 'ok') {
                             Swal.fire(
@@ -456,27 +485,49 @@
         });
         $('#formRegistrarCliente').validate({
             rules: {
-                matricula: {
-                    required: true,
-                    number: true
+                email: {
+                    required: true
                 },
                 nombre: {
                     required: true
                 },
                 apellido: {
                     required: true
+                },
+                imagen_cliente: {
+                    required: true
+                },
+                empresa: {
+                    required: true
+                },
+                zona: {
+                    required: true
+                },
+                cuit: {
+                    required: true
                 }
             },
             messages: {
-                matricula: {
-                    required: "Ingresa una matrícula",
-                    number: "Sólo números"
+                email: {
+                    required: "Ingresa un email"
                 },
                 nombre: {
                     required: "Ingresa un nombre"
                 },
                 apellido: {
                     required: "Ingresa un apellido"
+                },
+                empresa: {
+                    required: "Selecciona una empresa"
+                },
+                zona: {
+                    required: "Selecciona una zona"
+                },
+                imagen_cliente: {
+                    required: "Selecciona una foto"
+                },
+                cuit: {
+                    required: "Ingresa un cuit"
                 }
             },
             errorElement: 'span',
@@ -497,10 +548,21 @@
         $.validator.setDefaults({
             submitHandler: function () {
                 var datos = $('#formActualizarCliente').serialize();
+                var imagen = "";
+                var form_data = new FormData(document.getElementById("formActualizarCliente"));
+                if ($('#imagen_cliente_actualizar').val() != null) {
+                    imagen = $('#imagen_cliente_actualizar').prop('files')[0];
+                }
+                form_data.append('imagen_cliente_actualizar', imagen);
+
                 $.ajax({
                     type: "POST",
                     url: "<?php echo constant('URL');?>cliente/update",
-                    data: datos,
+                    dataType: "html",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
                     success: function (data) {
                         if (data == 'ok') {
                             Swal.fire(
@@ -523,27 +585,49 @@
         });
         $('#formActualizarCliente').validate({
             rules: {
-                matriculaActualizar: {
-                    required: true,
-                    number: true
-                },
-                nombreActualizar: {
+                email_actualizar: {
                     required: true
                 },
-                apellidoActualizar: {
+                nombre_actualizar: {
+                    required: true
+                },
+                apellido_actualizar: {
+                    required: true
+                },
+                imagen_cliente_actualizar: {
+                    required: true
+                },
+                empresa_actualizar: {
+                    required: true
+                },
+                zona_actualizar: {
+                    required: true
+                },
+                cuit_actualizar: {
                     required: true
                 }
             },
             messages: {
-                matriculaActualizar: {
-                    required: "Ingresa una matrícula",
-                    number: "Sólo números"
+                email_actualizar: {
+                    required: "Ingresa un email"
                 },
-                nombreActualizar: {
+                nombre_actualizar: {
                     required: "Ingresa un nombre"
                 },
-                apellidoActualizar: {
+                apellido_actualizar: {
                     required: "Ingresa un apellido"
+                },
+                empresa_actualizar: {
+                    required: "Selecciona una empresa"
+                },
+                zona_actualizar: {
+                    required: "Selecciona una zona"
+                },
+                imagen_cliente_actualizar: {
+                    required: "Selecciona una foto"
+                },
+                cuit_actualizar: {
+                    required: "Ingresa un cuit"
                 }
             },
             errorElement: 'span',
@@ -588,4 +672,10 @@
             });
         });
     }
+
+    // Código para cambiar el texto del input al seleccionar una imagen
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
 </script>

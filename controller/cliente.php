@@ -11,7 +11,26 @@
         }
 
         function insert() {
-            $imagen = 'generica.png';
+            $nombreImagen = 'generica.png';
+            if($_FILES["imagen_cliente"]["name"] != null) {
+                $imagen = $_FILES["imagen_cliente"];
+                $nombreImagen = $imagen["name"];
+
+                $tipoImagen = $imagen["type"];
+                $ruta_provisional = $imagen["tmp_name"];
+
+                $fullname = $_POST['email'];
+                $carpeta = "public/img/" . $fullname . "/";
+
+                if ($tipoImagen != 'image/jpg' && $tipoImagen != 'image/jpeg' && $tipoImagen != 'image/png' && $tipoImagen != 'image/gif') {
+                    echo 'errorimagen';
+                } else {
+                    if (!file_exists($carpeta)) {
+                        mkdir($carpeta, 0777, true);
+                    }
+                    copy($ruta_provisional, $carpeta . $nombreImagen);
+                }
+            }
 
             $nombre = $_POST['nombre'];
             $apellido = $_POST['apellido'];
@@ -23,7 +42,7 @@
             $data = array(
                 'id_empresa' => $empresa,
                 'id_zona' => $zona,
-                'imagen' => $imagen,
+                'imagen' => $nombreImagen,
                 'cuit' => $cuit,
                 'nombre' => $nombre,
                 'apellido' => $apellido,
@@ -37,7 +56,27 @@
         }
 
         function update() {
-            $imagen = 'generica.png';
+            $nombreImagen = 'generica.png';
+            if($_FILES["imagen_cliente_actualizar"]["name"] != null) {
+                $imagen = $_FILES["imagen_cliente_actualizar"];
+                $nombreImagen = $imagen["name"];
+
+                $tipoImagen = $imagen["type"];
+                $ruta_provisional = $imagen["tmp_name"];
+
+                $fullname = $_POST['email_actualizar'];
+                $carpeta = "public/img/" . $fullname . "/";
+
+                if ($tipoImagen != 'image/jpg' && $tipoImagen != 'image/jpeg' && $tipoImagen != 'image/png' && $tipoImagen != 'image/gif') {
+                    echo 'errorimagen';
+                } else {
+                    if (!file_exists($carpeta)) {
+                        mkdir($carpeta, 0777, true);
+                    }
+                    copy($ruta_provisional, $carpeta . $nombreImagen);
+                }
+            }
+
             $idCliente = $_POST['id_cliente_actualizar'];
             $nombre = $_POST['nombre_actualizar'];
             $apellido = $_POST['apellido_actualizar'];
@@ -50,7 +89,7 @@
                 'id_cliente' => $idCliente,
                 'id_empresa' => $empresa,
                 'id_zona' => $zona,
-                'imagen' => $imagen,
+                'imagen' => $nombreImagen,
                 'cuit' => $cuit,
                 'nombre' => $nombre,
                 'apellido' => $apellido,
