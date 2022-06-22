@@ -1,5 +1,5 @@
 <?php
-    class Cliente extends Controller
+    class Usuario extends Controller
     {
         function __construct()
         {
@@ -11,10 +11,21 @@
         }
 
         function login() {
-            require 'model/usuarioDAO.php.php';
+            require 'model/usuarioDAO.php';
             $this->loadModel('UsuarioDAO');
+            $data = array(
+                'username' => $_POST['username'],
+                'password' => $_POST['password'],
+            );
+
             $usuarioDAO = new UsuarioDAO();
-            $usuarioDAO = $usuarioDAO->login();
-            echo $usuarioDAO;
+            $usuarioDAO->login($data);
+        }
+
+        function logout() {
+            session_start();
+            session_destroy();
+
+            header('location: ' . constant('URL') );
         }
     }

@@ -80,4 +80,4 @@ INSERT INTO `producto`(`id_producto`, `id_proveedor`, `nombre`, `precio`) VALUES
 INSERT INTO `producto`(`id_producto`, `id_proveedor`, `nombre`, `precio`) VALUES (2, 2, 'Reclutamiento personal básico', 16050.00);
 
 
-INSERT INTO `usuario`(`id_usuario`, `id_empresa`, `cuit`, `nombre`, `apellido`, `email`, `password`) VALUES (1, 1, 'KS7893029TR', 'Temolzin', 'Roldan', 'temolzin@hotmail.com', AES_ENCRYPT('root', 'key'));
+INSERT INTO `usuario`(`id_usuario`, `id_empresa`, `cuit`, `nombre`, `apellido`, `email`, `password`) VALUES (1, 1, 'KS7893029TR', 'Temolzin', 'Roldan', 'temolzin@hotmail.com', AES_ENCRYPT('root', 'diprem'));
